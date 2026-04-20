@@ -1,22 +1,28 @@
-name: C/C++ CI
-
+name: Deploy Web App
 on:
   push:
     branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-
+permissions:
+  contents: read
+  pages: write
+  id-token: write
 jobs:
   build:
-    runs-on: windows-latest  # Changed from ubuntu-latest
-
+    runs-on: ubuntu-latest
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-
-    - name: Compile C++ project
-      # Note: Windows uses g++ if available, or you can use shell: cmd
-      run: g++ Project.cpp -o app.exe
-
-    - name: Run program
-      run: ./app.exe
+    - uses: actions/checkout@v4
+    - name: Setup Emscripten
+      uses: mymindstorm/setup-emsdk@v14
+    - name: Compile
+      # ASYNCIFY is required to handle the 'cin' input in a browser
+      run: emcc Project.cpp -o index.html -s ASYNCIFY
+    - name: Upload
+      uses: actions/upload-pages-artifact@v3
+      with:
+        path: '.'
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - name: Deploy
+      uses: actions/deploy-pages@v4
