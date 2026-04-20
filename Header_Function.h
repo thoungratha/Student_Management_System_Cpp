@@ -3,7 +3,6 @@
 
 #include <iostream>
 #include <fstream>
-#include <windows.h>
 
 // For clear screen
 #include <stdlib.h>
