@@ -8,16 +8,15 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest  # Changed from ubuntu-latest
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
 
     - name: Compile C++ project
-      # We compile Project.cpp and name the output 'app'
-      run: g++ Project.cpp -o app
+      # Note: Windows uses g++ if available, or you can use shell: cmd
+      run: g++ Project.cpp -o app.exe
 
     - name: Run program
-      # This runs the compiled program to make sure it works
-      run: ./app
+      run: ./app.exe
