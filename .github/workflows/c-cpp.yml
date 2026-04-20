@@ -9,19 +9,15 @@ on:
 jobs:
   build:
     runs-on: windows-latest
-    timeout-minutes: 10  # Stops the job if it hangs for more than 10 mins
+    # This prevents the "run not stop" issue by killing it after 5 minutes
+    timeout-minutes: 5 
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Set up MinGW
-      uses: egor-tensin/setup-mingw@v2
-      with:
-        platform: x64
-
     - name: Compile C++ project
-      # -static ensures the .exe can run without needing extra .dll files nearby
+      # -static packs libraries into the exe so it runs anywhere
       run: g++ Project.cpp -static -o app.exe
 
     - name: Run program
