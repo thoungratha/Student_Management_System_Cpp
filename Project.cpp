@@ -1,7 +1,6 @@
 // Include Library
 #include <iostream>
 #include <fstream>
-#include <windows.h>
 
 // Clear screen
 #include <stdlib.h>
