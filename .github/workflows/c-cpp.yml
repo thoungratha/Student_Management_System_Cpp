@@ -1,4 +1,4 @@
-name: C++ Build
+name: C/C++ CI
 
 on:
   push:
@@ -14,12 +14,10 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Install compiler
-      run: sudo apt-get install -y g++
-
     - name: Compile C++ project
-      run: |
-        g++ src/main.cpp -o app
+      # We compile Project.cpp and name the output 'app'
+      run: g++ Project.cpp -o app
 
     - name: Run program
+      # This runs the compiled program to make sure it works
       run: ./app
