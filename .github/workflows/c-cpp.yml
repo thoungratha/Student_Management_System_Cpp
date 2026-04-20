@@ -1,28 +1,27 @@
-name: Deploy Web App
+name: C/C++ CI
+
 on:
   push:
     branches: [ "main" ]
-permissions:
-  contents: read
-  pages: write
-  id-token: write
+  pull_request:
+    branches: [ "main" ]
+
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
+
     steps:
-    - uses: actions/checkout@v4
-    - name: Setup Emscripten
-      uses: mymindstorm/setup-emsdk@v14
-    - name: Compile
-      # ASYNCIFY is required to handle the 'cin' input in a browser
-      run: emcc Project.cpp -o index.html -s ASYNCIFY
-    - name: Upload
-      uses: actions/upload-pages-artifact@v3
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    # This ensures MinGW is properly configured on the Windows Runner
+    - name: Set up GCC
+      uses: egor-tensin/setup-gcc@v1
       with:
-        path: '.'
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-    - name: Deploy
-      uses: actions/deploy-pages@v4
+        platform: x64
+
+    - name: Compile C++ project
+      run: g++ Project.cpp -o app.exe
+
+    - name: Run program
+      run: .\app.exe
